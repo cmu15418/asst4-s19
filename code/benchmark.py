@@ -331,6 +331,7 @@ def run(name, args):
     global outFile, doCheck
     global uniqueId
     global runCount
+    global defaultProcessCount
     graphDimension = defaultDimension
     nstep = defaultSteps
     testList = list(defaultTests)
@@ -344,6 +345,8 @@ def run(name, args):
     if host[:3] == 'ghc' or host[:4] == 'unix':
         machine = 'g'
         doCheck = True
+        if host[:3] == 'ghc':
+            defaultProcesCount = 6
     elif host[:8] == 'latedays' or host[:7] == 'compute':
         machine = 'l'
         doCheck = True
@@ -387,10 +390,6 @@ def run(name, args):
             outmsg("Unknown option '%s'" % opt)
             usage(name)
     
-    if machine == 'g' and processCount > 6:
-        outmsg("Can only run GHC machines with maximum of %d processes" % 6)
-        usage(name)
-
     tstart = datetime.datetime.now()
 
     sweep(testList, graphDimension, updateType, nstep, processCount, machine, otherArgs)
